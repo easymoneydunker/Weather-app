@@ -1,4 +1,3 @@
-import org.json.JSONObject;
 import javax.swing.*;
 import java.awt.*;
 public class Application extends JFrame {
@@ -7,7 +6,6 @@ public class Application extends JFrame {
         frame.setSize(300, 400);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        StringBuilder parameters = new StringBuilder();
 
         JLabel label = new JLabel("Enter city name: ", SwingConstants.CENTER);
         JTextField textField = new JTextField("", 5);
@@ -16,15 +14,10 @@ public class Application extends JFrame {
         jButton.addActionListener(event -> {
             String city = textField.getText().trim();
             String output = GetURL.getURLContent("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid="+ Main.APIKEY +"&units=metric");
-            if (!output.isEmpty()){
-                JSONObject obj = new JSONObject(output);
-                parameters.append("The temperature is ").append(obj.getJSONObject("main").getDouble("temp")).append("\n");
-                parameters.append("Feels like ").append(obj.getJSONObject("main").getDouble("feels_like")).append("\n");
-                parameters.append("Max is ").append(obj.getJSONObject("main").getDouble("temp_max")).append("\n");
-                parameters.append("Min is ").append(obj.getJSONObject("main").getDouble("temp_min")).append("\n");
-                parameters.append("Presure is ").append(obj.getJSONObject("main").getDouble("pressure")).append("\n");
+            if (!output.isEmpty()) {
+                String result = JSONObjectWeatherInfo.getJSONObjectWeatherInfo(output);
+                JOptionPane.showMessageDialog(null, result);
             }
-            JOptionPane.showMessageDialog(null,  parameters.toString());
         });
 
         Container container = frame.getContentPane();
